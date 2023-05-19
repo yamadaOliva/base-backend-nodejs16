@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   Agreement.init({
     review_id: DataTypes.INTEGER,
     user_id: DataTypes.INTEGER,
-    agreement: DataTypes.INTEGER,
+    agreement: DataTypes.BOOLEAN,
   }, {
     sequelize,
     modelName: 'Agreement',
