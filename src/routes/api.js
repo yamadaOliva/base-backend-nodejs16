@@ -8,6 +8,7 @@ const initAPI = (app) => {
         return res.status(200).json(req.body);
     });
     router.post('/register', authController.registerController)
+    router.post('/login', authController.loginController)
     return app.use("/api/v1", router);
 }
 

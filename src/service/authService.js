@@ -57,13 +57,13 @@ const loginService = async (user) => {
             DT : ""
         }
     }else {
-        const user = await db.User.findOne({
+        const userTemp = await db.User.findOne({
             where: {
                 email: user.email
             }
         });
-        let token = JWTmiddleware.createToken(user);
-        const isMatch = bcrypt.compareSync(user.password, hashPassword(user.password));
+        
+        const isMatch = bcrypt.compareSync(user.password, userTemp.password);
         if (!isMatch) {
             return {
                 EC : 400,
@@ -71,13 +71,14 @@ const loginService = async (user) => {
                 DT : ""
             }
         }else {
+            let token = JWTmiddleware.createToken(user);
             return {
                 EC : 200,
                 EM : 'Login successfully',
                 DT : {
                     accessToken: token,
-                    email: user.email,
-                    username : user.username,
+                    email: userTemp.email,
+                    username : userTemp.username,
                 }
             }
         }

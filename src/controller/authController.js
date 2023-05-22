@@ -1,4 +1,4 @@
-import {registerService} from '../service/authService.js';
+import {registerService,loginService} from '../service/authService.js';
 
 const registerController = async (req, res) => {
     const user = req.body;
