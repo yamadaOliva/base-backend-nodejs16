@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import db from '../models/index.js';
+import JWTmiddleware from '../middleware/JWTmiddleware.js';
 //hash password
 const salt = bcrypt.genSaltSync(10);
 const hashPassword = (password) => {
@@ -61,6 +62,7 @@ const loginService = async (user) => {
                 email: user.email
             }
         });
+        let token = JWTmiddleware.createToken(user);
         const isMatch = bcrypt.compareSync(user.password, hashPassword(user.password));
         if (!isMatch) {
             return {
@@ -72,7 +74,11 @@ const loginService = async (user) => {
             return {
                 EC : 200,
                 EM : 'Login successfully',
-                DT : user
+                DT : {
+                    accessToken: token,
+                    email: user.email,
+                    username : user.username,
+                }
             }
         }
     }
@@ -80,5 +86,6 @@ const loginService = async (user) => {
 
 
 module.exports = {
-    registerService
+    registerService,
+    loginService
 }
