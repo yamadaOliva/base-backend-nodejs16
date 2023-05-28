@@ -52,8 +52,8 @@ const loginService = async (user) => {
     const userIsExists = await checkUserExists(user.email);
     if (!userIsExists) {
         return {
-            EC : 400,
-            EM : 'Email is not exists',
+            EC : -1,
+            EM : 'Password or email is not correct',
             DT : ""
         }
     }else {
@@ -66,8 +66,8 @@ const loginService = async (user) => {
         const isMatch = bcrypt.compareSync(user.password, userTemp.password);
         if (!isMatch) {
             return {
-                EC : 400,
-                EM : 'Password is not correct',
+                EC : -1,
+                EM : 'Password or email is not correct',
                 DT : ""
             }
         }else {
