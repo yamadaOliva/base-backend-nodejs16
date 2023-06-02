@@ -5,6 +5,7 @@ import configCors from "./config/cors.js";
 import connectDB from "./config/connectDB.js";
 import bodyParser from "body-parser";
 import JWTmiddleware from "./middleware/JWTmiddleware.js";
+import {faker} from '@faker-js/faker';
 require("dotenv").config();
 
 const app = express();

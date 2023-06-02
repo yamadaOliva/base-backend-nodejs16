@@ -13,7 +13,7 @@ module.exports = {
      * }], {});
      */
     let arrayMaid = [];
-    for (let i = 10; i <= 100; i++) {
+    for (let i = 1; i <= 100; i++) {
       arrayMaid.push({
         email: `maid${i}@gmail.com`,
         password:
@@ -28,40 +28,17 @@ module.exports = {
       "User",
       [
         {
-          email: "maid1@gmail.com",
+          email: "adm@gmail.com",
           password:
             "$2a$10$TB0ZOdUaSdWCJjXY5GnfquMEBw6WuBDaN5rRyGDIj4M6maqD51nES",
           username: "maid1",
-          role: 2,
-          name: "maid",
-        },
-        {
-          email: "maid2",
-          password:
-            "$2a$10$TB0ZOdUaSdWCJjXY5GnfquMEBw6WuBDaN5rRyGDIj4M6maqD51nES",
-          username: "maid2",
-          role: 2,
-          name: "maid",
-        },
-        {
-          email: "maid3",
-          password:
-            "$2a$10$TB0ZOdUaSdWCJjXY5GnfquMEBw6WuBDaN5rRyGDIj4M6maqD51nES",
-          username: "maid3",
-          role: 2,
-          name: "maid",
-        },
-        {
-          email: "maid4",
-          password:
-            "$2a$10$TB0ZOdUaSdWCJjXY5GnfquMEBw6WuBDaN5rRyGDIj4M6maqD51nES",
-          username: "maid4",
-          role: 2,
-          name: "maid",
-        },
+          role: 0,
+          name: "ADMIN",
+        }
       ],
       {}
     );
+    
   },
 
   async down(queryInterface, Sequelize) {
