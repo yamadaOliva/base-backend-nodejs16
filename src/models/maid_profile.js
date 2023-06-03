@@ -11,18 +11,19 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+     Maid_profile.hasOne(models.User)
     }
   }
   Maid_profile.init({
     maid_id: DataTypes.INTEGER,
-    frist_name: DataTypes.STRING,
+    first_name: DataTypes.STRING,
     last_name: DataTypes.STRING,
     phone_number: DataTypes.STRING,
     address: DataTypes.STRING,
     city: DataTypes.STRING,
     country: DataTypes.STRING,
     description: DataTypes.STRING,
-    exprience: DataTypes.STRING,
+    experience: DataTypes.STRING,
     skills: DataTypes.STRING,
     ceftification: DataTypes.STRING,
     price_per_hour: DataTypes.INTEGER,

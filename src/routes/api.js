@@ -1,5 +1,6 @@
 import express from 'express';
 import  authController from '../controller/authController.js';
+import maidController from '../controller/maidController.js';
 const router = express.Router();
 
 const initAPI = (app) => {
@@ -9,6 +10,7 @@ const initAPI = (app) => {
     });
     router.post('/register', authController.registerController)
     router.post('/login', authController.loginController)
+    router.get('/maid-list', maidController.getMaidListController)
     return app.use("/api/v1", router);
 }
 
