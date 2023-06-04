@@ -11,11 +11,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-     Maid_profile.hasOne(models.User)
+     Maid_profile.belongsTo(models.User)
     }
   }
   Maid_profile.init({
-    maid_id: DataTypes.INTEGER,
+    UserId: DataTypes.INTEGER,
     first_name: DataTypes.STRING,
     last_name: DataTypes.STRING,
     phone_number: DataTypes.STRING,
@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     city: DataTypes.STRING,
     country: DataTypes.STRING,
     description: DataTypes.STRING,
-    experience: DataTypes.STRING,
+    experience: DataTypes.INTEGER,
     skills: DataTypes.STRING,
     ceftification: DataTypes.STRING,
     price_per_hour: DataTypes.INTEGER,

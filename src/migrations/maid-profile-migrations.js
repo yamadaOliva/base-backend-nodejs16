@@ -9,7 +9,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-     maid_id: {
+    UserID: {
         type: Sequelize.INTEGER,
      },
      first_name: {
@@ -34,7 +34,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       experience: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
       },
       skills: {
         type: Sequelize.STRING,
