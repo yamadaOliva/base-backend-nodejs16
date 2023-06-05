@@ -10,7 +10,9 @@ const initAPI = (app) => {
     });
     router.post('/register', authController.registerController)
     router.post('/login', authController.loginController)
-    router.get('/maid-list', maidController.getMaidListController)
+    //maid api
+    router.get('/maid/list', maidController.getMaidListController)
+    router.get('/maid/findbyname', maidController.findMaidByLikeNameController)
     return app.use("/api/v1", router);
 }
 
