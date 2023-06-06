@@ -20,6 +20,32 @@ const getMaidLanguage = async (maidId) => {
   }
 }
 
+const getMaidbyId = async (maidId) => {
+  try {
+    const maid = await db.Maid_profile.findOne({
+      where: {
+        UserId: maidId,
+      },
+      include: [
+        {
+          model: db.User,
+          attributes: ["username", "email"],
+        },
+        {
+          model: db.Language,
+          attributes: ["language_name"],
+          through: {
+            attributes: [],
+          },
+        }
+      ],
+    });
+    return maid;
+  } catch (error) {
+    
+  }
+}
+
 const getMaidList = async () => {
   try {
     const maidList = await db.Maid_profile.findAll({
@@ -145,4 +171,5 @@ module.exports = {
   findMaidByLikeName,
   findMaidByPage,
   findMaidByLanguage,
+  getMaidbyId,
 };
