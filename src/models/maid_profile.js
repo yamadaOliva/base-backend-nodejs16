@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
      Maid_profile.belongsTo(models.User)
+      Maid_profile.belongsToMany(models.Language,{through: 'Maid_language'});
     }
   }
   Maid_profile.init({

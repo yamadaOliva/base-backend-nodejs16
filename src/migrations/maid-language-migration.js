@@ -9,11 +9,11 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      maid_id: {
+      MaidProfileId: {
         allowNull: false,
         type: Sequelize.INTEGER
       },
-      language_id: {
+      LanguageID: {
         allowNull: false,
         type: Sequelize.INTEGER
       },

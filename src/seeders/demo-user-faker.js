@@ -12,6 +12,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
      */
+    
     let arrayMaid = [];
     for (let i = 1; i <= 100; i++) {
       arrayMaid.push({

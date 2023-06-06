@@ -1,6 +1,25 @@
 import db from "../models/index.js";
 const { Op } = require("sequelize");
 import Sequelize from "sequelize";
+const getMaidLanguage = async (maidId) => {
+  try {
+    const maidLanguage = await db.Maid_language.findAll({
+      where: {
+        MaidProfileID: maidId,
+      },
+      include: [
+        {
+          model: db.Language,
+          attributes: ["language_name"],
+        },
+      ],
+    });
+    return maidLanguage;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 const getMaidList = async () => {
   try {
     const maidList = await db.Maid_profile.findAll({
@@ -9,6 +28,13 @@ const getMaidList = async () => {
           model: db.User,
           attributes: ["username", "email"],
         },
+        {
+          model: db.Language,
+          attributes: ["language_name"],
+          through: {
+            attributes: [],
+          },
+        }
       ],
     });
     return {
@@ -56,6 +82,13 @@ const findMaidByPage = async (page,limit) => {
                     model: db.User,
                     attributes: ["username", "email"],
                 },
+                {
+                  model: db.Language,
+                  attributes: ["language_name"],
+                  through: {
+                    attributes: [],
+                  },
+                }
             ],
             offset: offset,
             limit: limit,
@@ -74,10 +107,42 @@ const findMaidByPage = async (page,limit) => {
     } catch (error) {
         console.log(error);
     }
-        
 }
+
+const findMaidByLanguage = async (language) => {
+  try {
+    const maidList = await db.Maid_profile.findAll({
+      include: [
+        {
+          model: db.User,
+          attributes: ["username", "email"],
+        },
+        {
+          model: db.Language,
+          attributes: ["language_name"],
+          through: {
+            attributes: [],
+          },
+          where: {
+            language_name: language,
+          },
+        },
+      ],
+    });
+    return {
+      EC: 200,
+      EM: "Get maid list successfully",
+      DT: maidList,
+    };
+  } catch (error) {
+    
+  }
+}
+
+
 module.exports = {
   getMaidList,
   findMaidByLikeName,
-  findMaidByPage
+  findMaidByPage,
+  findMaidByLanguage,
 };

@@ -13,6 +13,7 @@ const initAPI = (app) => {
     //maid api
     router.get('/maid/list', maidController.getMaidListController)
     router.get('/maid/findbyname', maidController.findMaidByLikeNameController)
+    router.get('/maid/findbyLanguage', maidController.findMaidByLanguageController)
     return app.use("/api/v1", router);
 }
 
