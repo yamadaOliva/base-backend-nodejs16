@@ -11,7 +11,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-   
+    const money = [5,10,15,20];
     const { faker } = require('@faker-js/faker');
     const getRand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
     let arrayMaid = [];
@@ -30,7 +30,7 @@ module.exports = {
         skills: faker.lorem.paragraph(),
         birth_date: faker.date.past(),
         ceftification: faker.lorem.paragraph(),
-        price_per_hour: faker.number.int(),
+        price_per_hour: money[getRand(0, 3)],
         avatar_url: faker.image.avatar(),
       });
     }
