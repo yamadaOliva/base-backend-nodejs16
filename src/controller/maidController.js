@@ -4,6 +4,7 @@ import {
   findMaidByPage,
   findMaidByLanguage,
   getMaidbyId,
+  filterMaid
 } from "../service/MaidService.js";
 
 const getMaidListController = async (req, res) => {
@@ -53,9 +54,21 @@ const findMaidByIdController = async (req, res) => {
     console.log(error);
   }
 };
+
+  const filterMaidController = async (req,res) =>{
+    console.log(req.body.filterField);
+    try {
+      const maidList = await filterMaid(req.body.filterField);
+      return res.status(200).json(maidList);
+    } catch (error) {
+      console.log(error)
+    }
+    
+  }
 module.exports = {
   getMaidListController,
   findMaidByLikeNameController,
   findMaidByLanguageController,
   findMaidByIdController,
+  filterMaidController
 };

@@ -164,7 +164,29 @@ const findMaidByLanguage = async (language) => {
     
   }
 }
-
+// fdf
+const filterMaid= async(filterField)=>{ 
+  let maidList=[];
+  console.log("serivice filter =>>>",filterField , filterField?.byExp?.on==true);
+  try {
+    if(filterField?.byExp?.on==true){
+      maidList = await db.Maid_profile.findAll({
+        where:{
+          //[Op.and]:[{[Op.gte]: filterField?.byExp.min},{[Op.lte]:  filterField?.byExp.max}]
+          [Op.gte]: +filterField?.byExp.min
+        }
+      })
+    }
+    return {
+      EC : 200,
+      EM : "successful",
+      DT : maidList
+    }
+  } catch (error) {
+    console.log(error)
+  }
+  
+}
 
 module.exports = {
   getMaidList,
@@ -172,4 +194,5 @@ module.exports = {
   findMaidByPage,
   findMaidByLanguage,
   getMaidbyId,
+  filterMaid
 };

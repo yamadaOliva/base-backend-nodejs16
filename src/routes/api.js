@@ -15,6 +15,7 @@ const initAPI = (app) => {
     router.get('/maid/findbyname', maidController.findMaidByLikeNameController)
     router.get('/maid/findbyLanguage', maidController.findMaidByLanguageController)
     router.get('/maid/findbyid', maidController.findMaidByIdController)
+    router.get('/maid/filter',maidController.filterMaidController)
 
     
     return app.use("/api/v1", router);
