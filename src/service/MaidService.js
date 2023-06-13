@@ -172,8 +172,10 @@ const filterMaid= async(filterField)=>{
     if(filterField?.byExp?.on==true){
       maidList = await db.Maid_profile.findAll({
         where:{
-          //[Op.and]:[{[Op.gte]: filterField?.byExp.min},{[Op.lte]:  filterField?.byExp.max}]
-          [Op.gte]: +filterField?.byExp.min
+          price_per_hour:{
+          [Op.and]:[{[Op.gte]: filterField?.byExp.min},{[Op.lte]:  filterField?.byExp.max}]
+          //[Op.gte]: +filterField?.byExp.min
+          }
         }
       })
     }
@@ -183,7 +185,7 @@ const filterMaid= async(filterField)=>{
       DT : maidList
     }
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
   
 }
