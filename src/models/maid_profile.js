@@ -29,6 +29,7 @@ module.exports = (sequelize, DataTypes) => {
     ceftification: DataTypes.STRING,
     price_per_hour: DataTypes.INTEGER,
     avatar_url: DataTypes.STRING,
+    rating: DataTypes.DECIMAL(10,1),
   }, {
     sequelize,
     modelName: 'Maid_profile',

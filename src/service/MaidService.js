@@ -18,7 +18,7 @@ const getMaidLanguage = async (maidId) => {
   } catch (error) {
     console.log(error);
   }
-}
+};
 
 const getMaidbyId = async (maidId) => {
   try {
@@ -37,14 +37,12 @@ const getMaidbyId = async (maidId) => {
           through: {
             attributes: [],
           },
-        }
+        },
       ],
     });
     return maid;
-  } catch (error) {
-    
-  }
-}
+  } catch (error) {}
+};
 
 const getMaidList = async () => {
   try {
@@ -60,7 +58,7 @@ const getMaidList = async () => {
           through: {
             attributes: [],
           },
-        }
+        },
       ],
     });
     return {
@@ -74,12 +72,12 @@ const getMaidList = async () => {
 };
 
 const findMaidByLikeName = async (name) => {
-    console.log(name);
+  console.log(name);
   try {
     const maidList = await db.Maid_profile.findAll({
       where: {
         last_name: {
-            [Op.like]: Sequelize.literal(`\'${name}%\'`) //sea
+          [Op.like]: Sequelize.literal(`\'${name}%\'`), //sea
         },
       },
       include: [
@@ -99,41 +97,41 @@ const findMaidByLikeName = async (name) => {
   }
 };
 
-const findMaidByPage = async (page,limit) => {
-    let offset = (page - 1) * limit;
-    try {
-        let { count, rows } = await db.Maid_profile.findAndCountAll({
-            include: [
-                {
-                    model: db.User,
-                    attributes: ["username", "email"],
-                },
-                {
-                  model: db.Language,
-                  attributes: ["language_name"],
-                  through: {
-                    attributes: [],
-                  },
-                }
-            ],
-            offset: offset,
-            limit: limit,
-            oder: [['last_name', 'DESC']]
-        });
-        let totalPage = Math.ceil(count / limit);
-        return {
-            EC: 200,
-            EM: "Get maid list successfully",
-            DT: {
-                totalPage: totalPage,
-                maidList:rows,
-                totalRows:count
-            }
-        };
-    } catch (error) {
-        console.log(error);
-    }
-}
+const findMaidByPage = async (page, limit) => {
+  let offset = (page - 1) * limit;
+  try {
+    let { count, rows } = await db.Maid_profile.findAndCountAll({
+      include: [
+        {
+          model: db.User,
+          attributes: ["username", "email"],
+        },
+        {
+          model: db.Language,
+          attributes: ["language_name"],
+          through: {
+            attributes: [],
+          },
+        },
+      ],
+      offset: offset,
+      limit: limit,
+      oder: [["last_name", "DESC"]],
+    });
+    let totalPage = Math.ceil(count / limit);
+    return {
+      EC: 200,
+      EM: "Get maid list successfully",
+      DT: {
+        totalPage: totalPage,
+        maidList: rows,
+        totalRows: count,
+      },
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 const findMaidByLanguage = async (language) => {
   try {
@@ -160,35 +158,62 @@ const findMaidByLanguage = async (language) => {
       EM: "Get maid list successfully",
       DT: maidList,
     };
-  } catch (error) {
-    
-  }
-}
+  } catch (error) {}
+};
 // fdf
-const filterMaid= async(filterField)=>{ 
-  let maidList=[];
-  console.log("serivice filter =>>>",filterField , filterField?.byExp?.on==true);
+const filterMaid = async (filterField) => {
+  let maidList = [];
+  console.log(
+    "serivice filter =>>>",
+    filterField,
+    filterField?.byExp?.on == true
+  );
   try {
-    if(filterField?.byExp?.on==true){
+    if (filterField?.byExp?.on == true) {
       maidList = await db.Maid_profile.findAll({
-        where:{
-          price_per_hour:{
-          [Op.and]:[{[Op.gte]: filterField?.byExp.min},{[Op.lte]:  filterField?.byExp.max}]
-          //[Op.gte]: +filterField?.byExp.min
-          }
-        }
-      })
+        where: {
+          price_per_hour: {
+            [Op.and]: [
+              { [Op.gte]: filterField?.byExp.min },
+              { [Op.lte]: filterField?.byExp.max },
+            ],
+          },
+        },
+      });
+    }
+    if(filterField?.byPrice?.on == true){
+      maidList = await db.Maid_profile.findAll({
+        where: {
+          price_per_hour: {
+            [Op.and]: [
+              { [Op.gte]: filterField?.byPrice.min },
+              { [Op.lte]: filterField?.byPrice.max },
+            ],
+          },
+        },
+      });
+    }
+    if(filterField?.byRating?.on == true){
+      maidList = await db.Maid_profile.findAll({
+        where: {
+          rating: {
+            [Op.and]: [
+              { [Op.gte]: filterField?.byRating.min },
+              { [Op.lte]: filterField?.byRating.max },
+            ],
+          },
+        },
+      });
     }
     return {
-      EC : 200,
-      EM : "successful",
-      DT : maidList
-    }
+      EC: 200,
+      EM: "successful",
+      DT: maidList,
+    };
   } catch (error) {
     console.log(error);
   }
-  
-}
+};
 
 module.exports = {
   getMaidList,
@@ -196,5 +221,5 @@ module.exports = {
   findMaidByPage,
   findMaidByLanguage,
   getMaidbyId,
-  filterMaid
+  filterMaid,
 };

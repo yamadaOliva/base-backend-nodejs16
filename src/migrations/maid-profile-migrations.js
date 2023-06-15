@@ -51,6 +51,9 @@ module.exports = {
       avatar_url: {
         type: Sequelize.STRING,
       },
+      rating: {
+        type: Sequelize.DECIMAL(10,1),
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

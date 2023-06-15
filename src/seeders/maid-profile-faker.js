@@ -32,6 +32,7 @@ module.exports = {
         ceftification: faker.lorem.paragraph(),
         price_per_hour: money[getRand(0, 3)],
         avatar_url: faker.image.avatar(),
+        rating: faker.number.float({min: 0, max: 5, precision: 0.1}),
       });
     }
     await queryInterface.bulkInsert('maid_profile', arrayMaid, {});
