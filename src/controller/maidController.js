@@ -8,14 +8,12 @@ import {
 } from "../service/MaidService.js";
 
 const getMaidListController = async (req, res) => {
-  console.log(req.query.page + " " + req.query.limit);
   try {
     if (req.query.page == undefined || req.query.limit == undefined) {
       const maidList = await getMaidList();
       return res.status(200).json(maidList);
     }
     const maidList = await findMaidByPage(+req.query.page, +req.query.limit);
-    console.log(maidList);
     return res.status(200).json(maidList);
   } catch (error) {
     console.log(error);
@@ -56,9 +54,9 @@ const findMaidByIdController = async (req, res) => {
 };
 
   const filterMaidController = async (req,res) =>{
-    console.log(req.body.filterField);
+    console.log(req.query.filterField);
     try {
-      const maidList = await filterMaid(req.body.filterField);
+      const maidList = await filterMaid(req.query.filterField);
       return res.status(200).json(maidList);
     } catch (error) {
       console.log(error)

@@ -153,58 +153,122 @@ const findMaidByLanguage = async (language) => {
         },
       ],
     });
-    return {
-      EC: 200,
-      EM: "Get maid list successfully",
-      DT: maidList,
-    };
+    return maidList;
   } catch (error) {}
 };
 // fdf
 const filterMaid = async (filterField) => {
   let maidList = [];
-  console.log(
-    "serivice filter =>>>",
-    filterField,
-    filterField?.byExp?.on == true
-  );
+  let maidList1 = [];
+  let maidList2 = [];
+  let maidList3 = [];
+  let maidList4 = [];
+  //string to json
+  filterField = JSON.parse(filterField);
   try {
-    if (filterField?.byExp?.on == true) {
-      maidList = await db.Maid_profile.findAll({
+    if (filterField?.experience?.on == true) {
+      maidList1 = await db.Maid_profile.findAll({
         where: {
           price_per_hour: {
             [Op.and]: [
-              { [Op.gte]: filterField?.byExp.min },
-              { [Op.lte]: filterField?.byExp.max },
+              { [Op.gte]: filterField?.experience.min },
+              { [Op.lte]: filterField?.experience.max },
             ],
           },
         },
+        include: [
+          {
+            model: db.User,
+            attributes: ["username", "email"],
+          },
+          {
+            model: db.Language,
+            attributes: ["language_name"],
+            through: {
+              attributes: [],
+            },
+          },
+        ],
       });
     }
-    if(filterField?.byPrice?.on == true){
-      maidList = await db.Maid_profile.findAll({
+    if (filterField?.price?.on == true) {
+      maidList2 = await db.Maid_profile.findAll({
         where: {
           price_per_hour: {
             [Op.and]: [
-              { [Op.gte]: filterField?.byPrice.min },
-              { [Op.lte]: filterField?.byPrice.max },
+              { [Op.gte]: filterField?.price.min },
+              { [Op.lte]: filterField?.price.max },
             ],
           },
         },
+        include: [
+          {
+            model: db.User,
+            attributes: ["username", "email"],
+          },
+          {
+            model: db.Language,
+            attributes: ["language_name"],
+            through: {
+              attributes: [],
+            },
+          },
+        ],
       });
     }
-    if(filterField?.byRating?.on == true){
-      maidList = await db.Maid_profile.findAll({
+    if (filterField?.rating?.on == true) {
+      maidList3 = await db.Maid_profile.findAll({
         where: {
           rating: {
             [Op.and]: [
-              { [Op.gte]: filterField?.byRating.min },
-              { [Op.lte]: filterField?.byRating.max },
+              { [Op.gte]: filterField?.rating.min },
+              { [Op.lte]: filterField?.rating.max },
             ],
           },
         },
+        include: [
+          {
+            model: db.User,
+            attributes: ["username", "email"],
+          },
+          {
+            model: db.Language,
+            attributes: ["language_name"],
+            through: {
+              attributes: [],
+            },
+          },
+        ],
       });
     }
+    
+    if (filterField?.language?.on == true)
+      maidList4 = await findMaidByLanguage(filterField?.language.language);
+    console.log("maidList4", maidList4.length);
+
+    // find common element of 4 arrays
+    if (maidList1.length > 0) maidList = maidList1;
+    else if (maidList2.length > 0) maidList = maidList2;
+    else if (maidList3.length > 0) maidList = maidList3;
+    else if (maidList4.length > 0) maidList = maidList4;
+    
+    
+    if (maidList1.length == 0) maidList1 = maidList;
+    if (maidList2.length == 0) maidList2 = maidList;
+    if (maidList3.length == 0) maidList3 = maidList;
+    if (maidList4.length == 0) maidList4 = maidList;
+
+    maidList = maidList.filter((value) => {
+      
+      return (
+        maidList1.some((item) => item.UserId == value.UserId) &&
+        maidList2.some((item) => item.UserId == value.UserId) &&
+        maidList3.some((item) => item.UserId == value.UserId) &&
+        maidList4.some((item) => item.UserId == value.UserId)
+      );
+    });
+
+    console.log("maidList", maidList.length);
     return {
       EC: 200,
       EM: "successful",
