@@ -169,7 +169,7 @@ const filterMaid = async (filterField) => {
     if (filterField?.experience?.on == true) {
       maidList1 = await db.Maid_profile.findAll({
         where: {
-          price_per_hour: {
+          experience: {
             [Op.and]: [
               { [Op.gte]: filterField?.experience.min },
               { [Op.lte]: filterField?.experience.max },
@@ -244,7 +244,11 @@ const filterMaid = async (filterField) => {
     
     if (filterField?.language?.on == true)
       maidList4 = await findMaidByLanguage(filterField?.language.language);
-    console.log("maidList4", maidList4.length);
+      console.log(" 0 :" ,maidList.length);
+      console.log(" 1 :" ,maidList1.length);
+      console.log(" 2 :" ,maidList2.length);
+      console.log(" 3 :" ,maidList3.length);
+      console.log(" 4 :" ,maidList4.length);
 
     // find common element of 4 arrays
     if (maidList1.length > 0) maidList = maidList1;
@@ -253,11 +257,16 @@ const filterMaid = async (filterField) => {
     else if (maidList4.length > 0) maidList = maidList4;
     
     
-    if (maidList1.length == 0) maidList1 = maidList;
-    if (maidList2.length == 0) maidList2 = maidList;
-    if (maidList3.length == 0) maidList3 = maidList;
-    if (maidList4.length == 0) maidList4 = maidList;
+    if (maidList1.length == 0 && !filterField.experience.on) maidList1 = maidList;
+    if (maidList2.length == 0 && !filterField.price.on) maidList2 = maidList;
+    if (maidList3.length == 0 && !filterField.rating.on) maidList3 = maidList;
+    if (maidList4.length == 0 && !filterField.language.on) maidList4 = maidList;
 
+    console.log(" 0 :" ,maidList.length);
+    console.log(" 1 :" ,maidList1.length);
+    console.log(" 2 :" ,maidList2.length);
+    console.log(" 3 :" ,maidList3.length);
+    console.log(" 4 :" ,maidList4.length);
     maidList = maidList.filter((value) => {
       
       return (
@@ -268,7 +277,6 @@ const filterMaid = async (filterField) => {
       );
     });
 
-    console.log("maidList", maidList.length);
     return {
       EC: 200,
       EM: "successful",
