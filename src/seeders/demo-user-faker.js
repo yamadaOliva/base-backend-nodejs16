@@ -24,7 +24,19 @@ module.exports = {
         name: `maid`,
       });
     }
+    let arrayUser = [];
+    for(let i= 101;i<=200;i++){
+      arrayUser.push({
+        email:`user${i}@gmail.com`,
+        password:
+          "$2a$10$TB0ZOdUaSdWCJjXY5GnfquMEBw6WuBDaN5rRyGDIj4M6maqD51nES",
+        username: `user${i}`,
+        role: 1,
+        name: `user`,
+      });
+    } 
     await queryInterface.bulkInsert("User", arrayMaid, {});
+    await queryInterface.bulkInsert("USer", arrayUser, {});
     await queryInterface.bulkInsert(
       "User",
       [

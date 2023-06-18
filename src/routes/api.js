@@ -1,6 +1,7 @@
 import express from 'express';
 import  authController from '../controller/authController.js';
 import maidController from '../controller/maidController.js';
+import reviewController from '../controller/reviewController.js';
 const router = express.Router();
 
 const initAPI = (app) => {
@@ -16,7 +17,7 @@ const initAPI = (app) => {
     router.get('/maid/findbyLanguage', maidController.findMaidByLanguageController)
     router.get('/maid/findbyid', maidController.findMaidByIdController)
     router.get('/maid/filter',maidController.filterMaidController)
-
+    router.get('/maid/review',reviewController.getReviewController)
     
     return app.use("/api/v1", router);
 }
