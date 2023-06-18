@@ -79,6 +79,7 @@ const loginService = async (user) => {
                     accessToken: token,
                     email: userTemp.email,
                     username : userTemp.username,
+                    role:userTemp.role
                 }
             }
         }
