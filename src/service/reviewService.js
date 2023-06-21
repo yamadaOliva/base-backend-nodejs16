@@ -16,6 +16,22 @@ const getReviewsByID = async (id) => {
     console.log(error);
   }
 };
+
+  const createReview = async (review) => {
+    try {
+      const newReview = await db.Review.create({
+        maid_id: review.maid_id,
+        UserId: review.UserId,
+        review: review.review,
+        rating: review.rating,
+        comment: review.comment,
+      });
+      return newReview;
+    } catch (error) {
+      console.log(error);
+    }
+  };
 module.exports = {
-    getReviewsByID
+    getReviewsByID,
+    createReview
 }

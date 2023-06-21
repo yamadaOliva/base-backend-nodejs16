@@ -1,4 +1,4 @@
-import {getReviewsByID} from '../service/reviewService.js';
+import {getReviewsByID, createReview} from '../service/reviewService.js';
 
 const getReviewController = async (req, res) => {
     try {
@@ -13,6 +13,20 @@ const getReviewController = async (req, res) => {
         console.log(error);
     }
 }
+const createReviewController = async (req, res) => {
+    try {
+        const review = req.body;
+        const newReview = await createReview(review);
+        res.status(200).json({
+            EC: 200,
+            EM: 'Create review successfully',
+            DT: newReview
+        })
+    } catch (error) {
+        console.log(error);
+    }
+}
 module.exports = {
-    getReviewController
+    getReviewController,
+    createReviewController
 }
