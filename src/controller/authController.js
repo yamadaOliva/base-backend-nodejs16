@@ -18,7 +18,7 @@ const loginController = async (req, res) => {
   try {
     const result = await loginService(user);
 
-    res.cookie("token", result.DT.accessToken, { httpOnly: true, maxAge: 1000 * 60 * 60  });
+    res.cookie("token", result.DT.accessToken, { httpOnly: false, maxAge: 1000 * 60 * 60  });
     console.log(result);
     return res.status(200).json(result);
   } catch (error) {
@@ -26,7 +26,16 @@ const loginController = async (req, res) => {
   }
 };
 
+const logoutController = async (req, res) => {
+  res.clearCookie("token");
+  return res.status(200).json({
+    EC: 0,
+    EM: "Logout successfully",
+    DT: "",
+  });
+};
 module.exports = {
   registerController,
   loginController,
+  logoutController,
 };
