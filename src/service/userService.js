@@ -26,7 +26,7 @@ const updateUserProfileService = async (user) => {
       };
     }
     const userUpdate = await db.User_profile.create({
-      UserID: user.id,
+      UserId: user.id,
       first_name: user.first_name,
       last_name: user.last_name,
       phone_number: user.phone_number,
@@ -53,7 +53,47 @@ const getUserProfileService = async (id) => {
         UserID: id,
       },
     });
-    return user;
+    if (!user) {
+      return {
+        EC: 400,
+        EM: "User profile not found",
+        DT: "",
+      };
+    }
+    return {
+      EC: 200,
+      EM: "Get user profile successfully",
+      DT: user,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const userProfileUpdateService = async (user) => {
+  try {
+    const userUpdate = await db.User_profile.update(
+      {
+        first_name: user.first_name,
+        last_name: user.last_name,
+        phone_number: user.phone_number,
+        address: user.address,
+        city: user.city,
+        country: user.country,
+        description: user.description,
+        avatar_url: user.avatar_url,
+      },
+      {
+        where: {
+          UserId: user.id,
+        },
+      }
+    );
+    return {
+      EC: 200,
+      EM: "Update user profile successfully",
+      DT: "",
+    };
   } catch (error) {
     console.log(error);
   }
@@ -62,4 +102,5 @@ const getUserProfileService = async (id) => {
 module.exports = {
   updateUserProfileService,
   getUserProfileService,
+  userProfileUpdateService,
 };

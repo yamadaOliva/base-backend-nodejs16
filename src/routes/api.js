@@ -24,6 +24,8 @@ const initAPI = (app) => {
     router.post('/review/create', reviewController.createReviewController)
 
     router.post('/user/profile',userController.updateUserProfileController)
+    router.get('/user/profile',userController.getUserProfileController)
+    router.post('/user/update',userController.userProfileUpdateController)
     return app.use("/api/v1", router);
 }
 
