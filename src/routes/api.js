@@ -3,6 +3,7 @@ import  authController from '../controller/authController.js';
 import maidController from '../controller/maidController.js';
 import reviewController from '../controller/reviewController.js';
 import userController from '../controller/userController.js';
+import requestController from '../controller/requestController.js';
 const router = express.Router();
 
 const initAPI = (app) => {
@@ -25,7 +26,8 @@ const initAPI = (app) => {
 
     router.post('/user/profile',userController.updateUserProfileController)
     router.get('/user/profile',userController.getUserProfileController)
-    router.post('/user/update',userController.userProfileUpdateController)
+
+    router.post('/request/create',requestController.createRequestController)
     return app.use("/api/v1", router);
 }
 
