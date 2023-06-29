@@ -80,7 +80,8 @@ const loginService = async (user) => {
                     email: userTemp.email,
                     username : userTemp.username,
                     role:userTemp.role,
-                    id : userTemp.id
+                    id : userTemp.id,
+                   
                 }
             }
         }
