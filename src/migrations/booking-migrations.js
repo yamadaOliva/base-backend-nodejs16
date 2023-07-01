@@ -29,7 +29,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       status: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       cancel_reason: {
         type: Sequelize.STRING
