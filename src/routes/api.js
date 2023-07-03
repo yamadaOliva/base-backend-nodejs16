@@ -28,6 +28,9 @@ const initAPI = (app) => {
     router.get('/user/profile',userController.getUserProfileController)
 
     router.post('/maid/request/create',requestController.createRequestController)
+    router.get('/maid/request/list',requestController.getListRequestController)
+    router.post('/maid/request/update',requestController.updateRequestController)
+    router.post('/maid/request/cancel',requestController.cancelRequestController)
     return app.use("/api/v1", router);
 }
 

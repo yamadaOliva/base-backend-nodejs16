@@ -1,5 +1,6 @@
 import db from "../models/index";
 const checkRequestIsExist = async (userId, MaidId) => {
+  console.log("checkRequestIsExist", userId, MaidId);
   try {
     const request = await db.Booking.findOne({
       where: {
@@ -7,7 +8,8 @@ const checkRequestIsExist = async (userId, MaidId) => {
         booking_id: MaidId,
       },
     });
-    return request ? true : false;
+    console.log(request&&request?.status == "pending");
+    return request&&request?.status == "pending" ? true : false;
   } catch (error) {
     console.log(error);
   }
@@ -17,7 +19,7 @@ const createRequest = async (request) => {
   if (isExist) {
     return {
       EC: 400,
-      EM: "Request is exist",
+      EM: "Wait for maid accept your request",
       DT: "",
     };
   }
@@ -78,7 +80,54 @@ const getListRequest = async (maid_id) => {
   }
 };
 
+const updateRequest = async (id) => {
+  try {
+    await db.Booking.update(
+      {
+        status: "Accepted",
+      },
+      {
+        where: {
+          id: id,
+        },
+      }
+    );
+    return {
+      EC: 200,
+      EM: "Update request successfully",
+      DT: "",
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const cancelRequest = async (id, reason) => {
+  try {
+    await db.Booking.update(
+      {
+        status: "Canceled",
+        cancel_reason: reason,
+      },
+      {
+        where: {
+          id: id,
+        },
+      }
+    );
+    return {
+      EC: 200,
+      EM: "Cancel request successfully",
+      DT: "",
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   createRequest,
-  getListRequest
+  getListRequest,
+  updateRequest,
+  cancelRequest,
 };
