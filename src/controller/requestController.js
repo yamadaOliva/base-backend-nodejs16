@@ -1,7 +1,7 @@
 import {
   createRequest,
   updateRequest,
-  getlistRequest,
+  getListRequest2,
   cancelRequest,
 } from "../service/requestService";
 const createRequestController = async (req, res) => {
@@ -18,7 +18,7 @@ const createRequestController = async (req, res) => {
 const updateRequestController = async (req, res) => {
   const id = req.body;
   try {
-    const result = await updateRequest(status, id);
+    const result = await updateRequest(id);
     return res.status(200).json(result);
   } catch (error) {
     console.log(error);
@@ -26,9 +26,10 @@ const updateRequestController = async (req, res) => {
 };
 
 const getListRequestController = async (req, res) => {
-  const maid_id = req.params.id;
+  const maid_id = req.query.id;
+  console.log("maid_id =>", maid_id);
   try {
-    const result = await getlistRequest(maid_id);
+    const result = await getListRequest2(maid_id);
     return res.status(200).json(result);
   } catch (error) {
     console.log(error);

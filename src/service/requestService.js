@@ -70,11 +70,11 @@ const createRequest = async (request) => {
   }
 };
 
-const getListRequest = async (maid_id) => {
+const getListRequest2 = async (user_id) => {
   try {
     const listRequest = await db.Booking.findAll({
       where: {
-        booking_id: maid_id,
+        booking_id: user_id,
       },
     });
     return {
@@ -134,7 +134,7 @@ const cancelRequest = async (id, reason) => {
 
 module.exports = {
   createRequest,
-  getListRequest,
+  getListRequest2,
   updateRequest,
   cancelRequest,
 };

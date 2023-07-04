@@ -1,15 +1,18 @@
-import { registerService, loginService } from "../service/authService.js";
+import {
+  registerService,
+  loginService,
+  reLoginService,
+} from "../service/authService.js";
 
 const registerController = async (req, res) => {
   const user = req.body;
   console.log(req.body);
   try {
     const result = await registerService(user);
-  return res.status(200).json(result);
+    return res.status(200).json(result);
   } catch (error) {
     console.log(error);
   }
-  
 };
 
 const loginController = async (req, res) => {
@@ -18,7 +21,10 @@ const loginController = async (req, res) => {
   try {
     const result = await loginService(user);
 
-    res.cookie("token", result.DT.accessToken, { httpOnly: false, maxAge: 1000 * 60 * 60  });
+    res.cookie("token", result.DT.accessToken, {
+      httpOnly: false,
+      maxAge: 1000 * 60 * 60,
+    });
     console.log(result);
     return res.status(200).json(result);
   } catch (error) {
@@ -34,8 +40,20 @@ const logoutController = async (req, res) => {
     DT: "",
   });
 };
+
+const reLoginController = async (req, res) => {
+  const token = req.cookies.token;
+  try {
+    const result = await reLoginService(token);
+    return res.status(200).json(result);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   registerController,
   loginController,
   logoutController,
+  reLoginController,
 };

@@ -32,6 +32,8 @@ const initAPI = (app) => {
     router.get('/maid/request/list',requestController.getListRequestController)
     router.post('/maid/request/update',requestController.updateRequestController)
     router.post('/maid/request/cancel',requestController.cancelRequestController)
+
+    router.get('/refesh-token',authController.reLoginController)
     return app.use("/api/v1", router);
 }
 
