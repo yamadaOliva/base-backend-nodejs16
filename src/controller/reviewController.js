@@ -1,4 +1,4 @@
-import {getReviewsByID, createReview} from '../service/reviewService.js';
+import {getReviewsByID, createReview, checkIsRequest} from '../service/reviewService.js';
 
 const getReviewController = async (req, res) => {
     try {
@@ -26,7 +26,19 @@ const createReviewController = async (req, res) => {
         console.log(error);
     }
 }
+
+const checkIsRequestController = async (req, res) => {
+    try {
+        const maid_id = req.query.maid_id;
+        const user_id = req.query.user_id;
+        const result = await checkIsRequest(maid_id,user_id);
+        res.status(200).json(result);
+    } catch (error) {
+        console.log(error);
+    }
+}
 module.exports = {
     getReviewController,
-    createReviewController
+    createReviewController,
+    checkIsRequestController
 }

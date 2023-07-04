@@ -23,6 +23,7 @@ const initAPI = (app) => {
 
     router.get('/review/show',reviewController.getReviewController)
     router.post('/review/create', reviewController.createReviewController)
+    router.get('/review/check', reviewController.checkIsRequestController)
 
     router.post('/user/profile',userController.updateUserProfileController)
     router.get('/user/profile',userController.getUserProfileController)

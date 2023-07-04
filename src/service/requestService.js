@@ -2,20 +2,29 @@ import db from "../models/index";
 const checkRequestIsExist = async (userId, MaidId) => {
   console.log("checkRequestIsExist", userId, MaidId);
   try {
-    const request = await db.Booking.findOne({
+    const request = await db.Booking.findAll({
       where: {
         user_id: userId,
         booking_id: MaidId,
       },
     });
-    console.log(request&&request?.status == "pending");
-    return request&&request?.status == "pending" ? true : false;
+    if (!request) return false;
+    let isExist = false;
+    request.forEach((item) => {
+      //convert to js obj;
+      item = item.get({ plain: true });
+      if (item.status == "pending") {
+        isExist = true;
+      }
+    });
+    return isExist;
   } catch (error) {
     console.log(error);
   }
 };
 const createRequest = async (request) => {
   const isExist = await checkRequestIsExist(request.user_id, request.maid_id);
+  console.log("isExist", isExist);
   if (isExist) {
     return {
       EC: 400,
@@ -38,7 +47,6 @@ const createRequest = async (request) => {
     request.end_date.hour,
     request.end_date.minute
   );
-  console.log("request =>", SD, ED);
   const formattedStartDate = SD.toISOString().slice(0, 19).replace("T", " ");
   const formattedEndDate = ED.toISOString().slice(0, 19).replace("T", " ");
   console.log("request =>", formattedStartDate, formattedEndDate);
@@ -52,7 +60,6 @@ const createRequest = async (request) => {
       status: request.status,
       cancel_reason: request.cancel_reason,
     });
-    console.log("Create request successfully");
     return {
       EC: 200,
       EM: "Create request successfully",
