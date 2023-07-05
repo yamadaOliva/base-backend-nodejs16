@@ -1,5 +1,6 @@
 import db from "../models/index.js";
 const { Op } = require("sequelize");
+import { a1} from "./authService.js";
 const checkUserProfileExists = async (id) => {
   try {
     const user = await db.User_profile.findOne({
@@ -99,8 +100,41 @@ const userProfileUpdateService = async (user) => {
   }
 };
 
+const getListUserProfilesService = async (page, limit) => {
+  console.log("page, limit", page, limit);
+  let offset = (page-1) * limit;
+  try {
+    let {count,rows} = await db.User_profile.findAndCountAll(
+      {
+      include: [
+        {
+          model: db.User,
+          attributes: ["username", "email"],
+        },
+      ],
+      offset: +offset,
+      limit: +limit,
+      
+    });
+    let totalPage = Math.ceil(count / limit);
+    return {
+      EC: 200,
+      EM: "Get list user profiles successfully",
+      DT: {
+        totalPage: totalPage,
+        userProfiles: rows,
+        totalRows: count,
+        blocked : await a1()
+      },
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   updateUserProfileService,
   getUserProfileService,
   userProfileUpdateService,
+  getListUserProfilesService,
 };

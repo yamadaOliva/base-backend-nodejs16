@@ -22,6 +22,7 @@ module.exports = {
         username: `maid${i}`,
         role: 2,
         name: `maid`,
+        status:"active"
       });
     }
     let arrayUser = [];
@@ -33,6 +34,7 @@ module.exports = {
         username: `user${i}`,
         role: 1,
         name: `user`,
+        status:"active"
       });
     } 
     await queryInterface.bulkInsert("User", arrayMaid, {});

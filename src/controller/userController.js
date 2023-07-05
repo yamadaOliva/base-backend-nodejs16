@@ -1,4 +1,4 @@
-import {updateUserProfileService} from "../service/userService.js";
+import {updateUserProfileService,getListUserProfilesService} from "../service/userService.js";
 
 const updateUserProfileController = async (req, res) => {
     const user = req.body;
@@ -19,7 +19,19 @@ const updateUserProfileController = async (req, res) => {
         console.log(error);
     }
 }
+
+const getListUserProfilesController = async (req, res) => {
+    const page = req.query.page;
+    const limit = req.query.limit;
+    try {
+        const result = await getListUserProfilesService(page, limit);
+        return res.status(200).json(result);
+    } catch (error) {
+        console.log(error);
+    }
+}
 module.exports = {
     updateUserProfileController,
-    getUserProfileController
+    getUserProfileController,
+    getListUserProfilesController
 }

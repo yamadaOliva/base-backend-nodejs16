@@ -1,6 +1,7 @@
 import db from "../models/index.js";
 const { Op } = require("sequelize");
 import Sequelize from "sequelize";
+import { a2} from "./authService.js";
 const getMaidLanguage = async (maidId) => {
   try {
     const maidLanguage = await db.Maid_language.findAll({
@@ -104,7 +105,7 @@ const findMaidByPage = async (page, limit) => {
       include: [
         {
           model: db.User,
-          attributes: ["username", "email"],
+          attributes: ["username", "email","status"],
         },
         {
           model: db.Language,
@@ -126,6 +127,7 @@ const findMaidByPage = async (page, limit) => {
         totalPage: totalPage,
         maidList: rows,
         totalRows: count,
+        blocked : await a2()
       },
     };
   } catch (error) {

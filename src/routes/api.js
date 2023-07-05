@@ -27,10 +27,12 @@ const initAPI = (app) => {
 
     router.post('/user/profile',userController.updateUserProfileController)
     router.get('/user/profile',userController.getUserProfileController)
+    router.get('/user/profile/list',userController.getListUserProfilesController)
 
     router.post('/maid/request/create',requestController.createRequestController)
     router.get('/maid/request/list',requestController.getListRequestController)
     router.post('/maid/request/update',requestController.updateRequestController)
+    router.get('/maid/request/average',requestController.getAverageRatingController)
 
     router.get('/refesh-token',authController.reLoginController)
     return app.use("/api/v1", router);

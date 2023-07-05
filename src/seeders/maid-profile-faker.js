@@ -14,6 +14,24 @@ module.exports = {
     const money = [5,10,15,20];
     const { faker } = require('@faker-js/faker');
     const getRand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+    const arraySkill = ['電子修理','料理','赤ちゃん世話']
+    const getRandom2Skills = () => {
+      let skill1 = arraySkill[getRand(0, 2)];
+      let skill2 = arraySkill[getRand(0, 2)];
+      while (skill1 === skill2) {
+        skill2 = arraySkill[getRand(0, 2)];
+      }
+      return [skill1, skill2];
+    }
+    const arrayCefitication = ['IELTS 8.0','TOEIC','TOEFL','JLPT N2']
+    const getRandom2Cefitication = () => {
+      let cefitication1 = arrayCefitication[getRand(0, 3)];
+      let cefitication2 = arrayCefitication[getRand(0, 3)];
+      while (cefitication1 === cefitication2) {
+        cefitication2 = arrayCefitication[getRand(0, 3)];
+      }
+      return [cefitication1, cefitication2];
+    }
     let arrayMaid = [];
     for (let i = 1; i <= 100; i++) {
       arrayMaid.push({
@@ -27,9 +45,9 @@ module.exports = {
         description: faker.lorem.paragraph(),
         skills: faker.lorem.paragraph(),
         experience: getRand(1, 10),
-        skills: faker.lorem.paragraph(),
+        skills: getRandom2Skills().join(','),
         birth_date: faker.date.past(),
-        ceftification: faker.lorem.paragraph(),
+        ceftification: getRandom2Cefitication().join(','),
         price_per_hour: money[getRand(0, 3)],
         avatar_url: faker.image.avatar(),
         rating: faker.number.float({min: 0, max: 5, precision: 0.1}),

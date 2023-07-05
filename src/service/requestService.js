@@ -1,4 +1,5 @@
 import db from "../models/index";
+import { getReviewsByID } from "./reviewService";
 const checkRequestIsExist = async (userId, MaidId) => {
   console.log("checkRequestIsExist", userId, MaidId);
   try {
@@ -199,6 +200,41 @@ const deleteRequest = async (id) => {
   }
 };
 
+const getAverageRating = async (maid_id) => {
+  try {
+    const ListReview = await getReviewsByID(maid_id);
+    let totalRating = 0;
+    ListReview.forEach((item) => {
+      item = item.get({ plain: true });
+      totalRating += item.rating;
+    });
+    const averageRating = totalRating / ListReview.length;
+    // sum of done request in this month
+    const doneRequest = await db.Booking.findAll({
+      where: {
+        booking_id: maid_id,
+        status: "Done",
+      },
+      include: {
+        model: db.User,
+        attributes: ["username"],
+      },
+    });
+
+    return {
+      EC: 200,
+      EM: "Get average rating successfully",
+      DT: {
+        averageRating: averageRating,
+        doneRequest: doneRequest,
+        ListReview: ListReview,
+      },
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   createRequest,
   getListRequest2,
@@ -207,4 +243,5 @@ module.exports = {
   refuseRequest,
   doneRequest,
   deleteRequest,
+  getAverageRating,
 };
