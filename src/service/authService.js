@@ -88,9 +88,17 @@ const loginService = async (user) => {
     }
 }
 
+const reLoginService =  (token) => {
+    const data = JWTmiddleware.verifyToken(token);
+    const res = loginService(data);
+    return res;
+}
 
+
+        
 
 module.exports = {
     registerService,
-    loginService
+    loginService,
+    reLoginService
 }

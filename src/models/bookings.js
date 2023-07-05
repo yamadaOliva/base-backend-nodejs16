@@ -22,7 +22,9 @@ module.exports = (sequelize, DataTypes) => {
     end_date: DataTypes.DATE,
     price: DataTypes.INTEGER,
     status: DataTypes.STRING,
-    cancel_reason: DataTypes.STRING
+    cancel_reason: DataTypes.STRING,
+    address: DataTypes.STRING,
+    note: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'Booking',

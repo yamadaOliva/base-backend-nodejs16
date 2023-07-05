@@ -3,6 +3,8 @@ import {
   updateRequest,
   getListRequest2,
   cancelRequest,
+  refuseRequest,
+  doneRequest,
 } from "../service/requestService";
 const createRequestController = async (req, res) => {
   const request = req.body;
@@ -16,9 +18,27 @@ const createRequestController = async (req, res) => {
 };
 
 const updateRequestController = async (req, res) => {
-  const id = req.body;
+  const data = req.body;
   try {
-    const result = await updateRequest(id);
+    let result;
+    switch (data.status) {
+      case "cancel":
+        result = await cancelRequest(data.data.id, data.data.reason);
+        break;
+      case "refuse":
+        result = await refuseRequest(data.data.id);
+        break;
+      case "done":
+        result = await doneRequest(data.data.id);
+        break;
+      case "accept":
+        result = await updateRequest(data);
+        break;
+      default:
+        result = await updateRequest(data);
+        break;
+    }
+
     return res.status(200).json(result);
   } catch (error) {
     console.log(error);
@@ -36,19 +56,8 @@ const getListRequestController = async (req, res) => {
   }
 };
 
-const cancelRequestController = async (req, res) => {
-  const { id, reason } = req.body;
-  try {
-    const result = await cancelRequest(id, reason);
-    return res.status(200).json(result);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 module.exports = {
   createRequestController,
   updateRequestController,
   getListRequestController,
-  cancelRequestController,
 };

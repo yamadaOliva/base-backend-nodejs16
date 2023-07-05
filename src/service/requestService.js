@@ -59,6 +59,7 @@ const createRequest = async (request) => {
       price: request.price,
       status: request.status,
       cancel_reason: request.cancel_reason,
+      address: request.address,
     });
     return {
       EC: 200,
@@ -75,6 +76,10 @@ const getListRequest2 = async (user_id) => {
     const listRequest = await db.Booking.findAll({
       where: {
         booking_id: user_id,
+      },
+      include: {
+        model: db.User,
+        attributes: ["username"],
       },
     });
     return {
@@ -132,9 +137,55 @@ const cancelRequest = async (id, reason) => {
   }
 };
 
+const refuseRequest = async (id) => {
+  try {
+    await db.Booking.update(
+      {
+        status: "Refused",
+      },
+      {
+        where: {
+          id: id,
+        },
+      }
+    );
+    return {
+      EC: 200,
+      EM: "Refuse request successfully",
+      DT: "",
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const doneRequest = async (id) => {
+  try {
+    await db.Booking.update(
+      {
+        status: "Done",
+      },
+      {
+        where: {
+          id: id,
+        },
+      }
+    );
+    return {
+      EC: 200,
+      EM: "Done request successfully",
+      DT: "",
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   createRequest,
   getListRequest2,
   updateRequest,
   cancelRequest,
+  refuseRequest,
+  doneRequest,
 };
