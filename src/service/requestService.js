@@ -96,7 +96,7 @@ const updateRequest = async (id) => {
   try {
     await db.Booking.update(
       {
-        status: "Accepted",
+        status: "accepted",
       },
       {
         where: {
@@ -181,6 +181,24 @@ const doneRequest = async (id) => {
   }
 };
 
+const deleteRequest = async (id) => {
+  console.log("deleteRequest", id);
+  try {
+    await db.Booking.destroy({
+      where: {
+        id: id,
+      },
+    });
+    return {
+      EC: 200,
+      EM: "Delete request successfully",
+      DT: "",
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   createRequest,
   getListRequest2,
@@ -188,4 +206,5 @@ module.exports = {
   cancelRequest,
   refuseRequest,
   doneRequest,
+  deleteRequest,
 };

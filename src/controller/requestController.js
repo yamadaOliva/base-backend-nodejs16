@@ -5,6 +5,7 @@ import {
   cancelRequest,
   refuseRequest,
   doneRequest,
+  deleteRequest,
 } from "../service/requestService";
 const createRequestController = async (req, res) => {
   const request = req.body;
@@ -19,6 +20,7 @@ const createRequestController = async (req, res) => {
 
 const updateRequestController = async (req, res) => {
   const data = req.body;
+  console.log("data =>", data);
   try {
     let result;
     switch (data.status) {
@@ -32,7 +34,10 @@ const updateRequestController = async (req, res) => {
         result = await doneRequest(data.data.id);
         break;
       case "accept":
-        result = await updateRequest(data);
+        result = await updateRequest(data.data.id);
+        break;
+      case "delete":
+        result = await deleteRequest(data.data.id);
         break;
       default:
         result = await updateRequest(data);
