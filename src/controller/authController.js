@@ -2,6 +2,7 @@ import {
   registerService,
   loginService,
   reLoginService,
+  blockedService,
 } from "../service/authService.js";
 
 const registerController = async (req, res) => {
@@ -51,9 +52,20 @@ const reLoginController = async (req, res) => {
   }
 };
 
+const blockedController = async (req, res) => {
+  const id = req.query.id;
+  try {
+    const result = await blockedService(id);
+    return res.status(200).json(result);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   registerController,
   loginController,
   logoutController,
   reLoginController,
+  blockedController,
 };

@@ -109,7 +109,7 @@ const getListUserProfilesService = async (page, limit) => {
       include: [
         {
           model: db.User,
-          attributes: ["username", "email"],
+          attributes: ["username", "email","active"],
         },
       ],
       offset: +offset,

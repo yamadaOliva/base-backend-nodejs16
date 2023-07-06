@@ -105,7 +105,7 @@ const findMaidByPage = async (page, limit) => {
       include: [
         {
           model: db.User,
-          attributes: ["username", "email","status"],
+          attributes: ["username", "email","active"],
         },
         {
           model: db.Language,

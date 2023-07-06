@@ -27,8 +27,8 @@ module.exports = {
       avatar_url: {
         type: Sequelize.STRING
       },
-      status: {
-        type: Sequelize.STRING
+      active: {
+        type: Sequelize.BOOLEAN
       },
       createdAt: {
         allowNull: false,

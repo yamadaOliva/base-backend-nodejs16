@@ -14,6 +14,7 @@ const initAPI = (app) => {
     router.post('/register', authController.registerController)
     router.post('/login', authController.loginController)
     router.post('/logout', authController.logoutController)
+    router.get('/blocked', authController.blockedController)
     //maid api
     router.get('/maid/list', maidController.getMaidListController)
     router.get('/maid/findbyname', maidController.findMaidByLikeNameController)

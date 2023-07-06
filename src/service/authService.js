@@ -94,7 +94,7 @@ const reLoginService = (token) => {
 const a1 = async () => {
   const count = await db.User.count({
     where: {
-      status: "blocked",
+      active: "false",
       role: 1,
     },
   });
@@ -104,17 +104,38 @@ const a1 = async () => {
 const a2 = async () => {
   const count = await db.User.count({
     where: {
-      status: "blocked",
+      active: "false",
       role: 2,
     },
   });
   return count;
 };
-
+const blockedService = async (id) => {
+  try {
+    const user = await db.User.update(
+      {
+        active: false,
+      },
+      {
+        where: {
+          id: id,
+        },
+      }
+    );
+    return {
+      EC: 200,
+      EM: "Blocked successfully",
+      DT: user,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
 module.exports = {
   registerService,
   loginService,
   reLoginService,
- a1,
-  a2
+  a1,
+  a2,
+  blockedService,
 };
