@@ -131,6 +131,29 @@ const blockedService = async (id) => {
     console.log(error);
   }
 };
+
+const unblockedService = async (id) => {
+    console.log("id==>",id);
+  try {
+    const user = await db.User.update(
+      {
+        active: true,
+      },
+      {
+        where: {
+          id: id,
+        },
+      }
+    );
+    return {
+      EC: 200,
+      EM: "Unblocked successfully",
+      DT: user,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
 module.exports = {
   registerService,
   loginService,
@@ -138,4 +161,5 @@ module.exports = {
   a1,
   a2,
   blockedService,
+  unblockedService,
 };

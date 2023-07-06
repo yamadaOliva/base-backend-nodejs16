@@ -3,6 +3,7 @@ import {
   loginService,
   reLoginService,
   blockedService,
+  unblockedService
 } from "../service/authService.js";
 
 const registerController = async (req, res) => {
@@ -62,10 +63,21 @@ const blockedController = async (req, res) => {
   }
 };
 
+  const unblockedController = async (req, res) => {
+  const id = req.query.id;
+  console.log("asfsdfsdf=>",id);
+  try {
+    const result = await unblockedService(id);
+    return res.status(200).json(result);
+  } catch (error) {
+    console.log(error);
+  }
+};
 module.exports = {
   registerController,
   loginController,
   logoutController,
   reLoginController,
   blockedController,
+  unblockedController
 };
