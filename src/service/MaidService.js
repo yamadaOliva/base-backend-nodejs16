@@ -1,7 +1,7 @@
 import db from "../models/index.js";
 const { Op } = require("sequelize");
 import Sequelize from "sequelize";
-import { a2} from "./authService.js";
+import { a2 } from "./authService.js";
 const getMaidLanguage = async (maidId) => {
   try {
     const maidLanguage = await db.Maid_language.findAll({
@@ -97,15 +97,33 @@ const findMaidByLikeName = async (name) => {
     console.log(error);
   }
 };
-
+const getPercentagesCancel = async (id) => {
+  try {
+    const cancel = await db.Booking.findAll({
+      where: {
+        booking_id: id,
+        status: "	rejected",
+      },
+    });
+    const total = await db.Booking.findAll({
+      where: {
+        booking_id: id,
+      },
+    });
+    return (cancel.length / total.length) * 100;
+  } catch (error) {
+    console.log(error);
+  }
+};
 const findMaidByPage = async (page, limit) => {
   let offset = (page - 1) * limit;
+  const percentageCancel = [];
   try {
     let { count, rows } = await db.Maid_profile.findAndCountAll({
       include: [
         {
           model: db.User,
-          attributes: ["username", "email","active"],
+          attributes: ["username", "email", "active"],
         },
         {
           model: db.Language,
@@ -119,6 +137,12 @@ const findMaidByPage = async (page, limit) => {
       limit: limit,
       oder: [["last_name", "DESC"]],
     });
+    for (let i = 0; i < rows.length; i++) {
+      let ptr = await getPercentagesCancel(rows[i].UserId);
+      if (ptr == null || ptr == undefined) ptr = 0;
+      percentageCancel.push(ptr);
+    }
+
     let totalPage = Math.ceil(count / limit);
     return {
       EC: 200,
@@ -127,7 +151,8 @@ const findMaidByPage = async (page, limit) => {
         totalPage: totalPage,
         maidList: rows,
         totalRows: count,
-        blocked : await a2()
+        blocked: await a2(),
+        percentageCancel: percentageCancel,
       },
     };
   } catch (error) {
@@ -243,34 +268,33 @@ const filterMaid = async (filterField) => {
         ],
       });
     }
-    
+
     if (filterField?.language?.on == true)
       maidList4 = await findMaidByLanguage(filterField?.language.language);
-      console.log(" 0 :" ,maidList.length);
-      console.log(" 1 :" ,maidList1.length);
-      console.log(" 2 :" ,maidList2.length);
-      console.log(" 3 :" ,maidList3.length);
-      console.log(" 4 :" ,maidList4.length);
+    console.log(" 0 :", maidList.length);
+    console.log(" 1 :", maidList1.length);
+    console.log(" 2 :", maidList2.length);
+    console.log(" 3 :", maidList3.length);
+    console.log(" 4 :", maidList4.length);
 
     // find common element of 4 arrays
     if (maidList1.length > 0) maidList = maidList1;
     else if (maidList2.length > 0) maidList = maidList2;
     else if (maidList3.length > 0) maidList = maidList3;
     else if (maidList4.length > 0) maidList = maidList4;
-    
-    
-    if (maidList1.length == 0 && !filterField.experience.on) maidList1 = maidList;
+
+    if (maidList1.length == 0 && !filterField.experience.on)
+      maidList1 = maidList;
     if (maidList2.length == 0 && !filterField.price.on) maidList2 = maidList;
     if (maidList3.length == 0 && !filterField.rating.on) maidList3 = maidList;
     if (maidList4.length == 0 && !filterField.language.on) maidList4 = maidList;
 
-    console.log(" 0 :" ,maidList.length);
-    console.log(" 1 :" ,maidList1.length);
-    console.log(" 2 :" ,maidList2.length);
-    console.log(" 3 :" ,maidList3.length);
-    console.log(" 4 :" ,maidList4.length);
+    console.log(" 0 :", maidList.length);
+    console.log(" 1 :", maidList1.length);
+    console.log(" 2 :", maidList2.length);
+    console.log(" 3 :", maidList3.length);
+    console.log(" 4 :", maidList4.length);
     maidList = maidList.filter((value) => {
-      
       return (
         maidList1.some((item) => item.UserId == value.UserId) &&
         maidList2.some((item) => item.UserId == value.UserId) &&
