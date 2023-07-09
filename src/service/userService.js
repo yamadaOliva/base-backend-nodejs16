@@ -27,7 +27,7 @@ const updateUserProfileService = async (user) => {
       };
     }
     const userUpdate = await db.User_profile.create({
-      UserId: user.id,
+      UserID :user.id,
       first_name: user.first_name,
       last_name: user.last_name,
       phone_number: user.phone_number,
@@ -37,6 +37,7 @@ const updateUserProfileService = async (user) => {
       description: user.description,
       avatar_url: user.avatar_url,
     });
+    console.log("userUpdate=>>", userUpdate);
     return {
       EC: 200,
       EM: "Update user profile successfully",
@@ -54,6 +55,7 @@ const getUserProfileService = async (id) => {
         UserID: id,
       },
     });
+    console.log("user=>>", id);
     if (!user) {
       return {
         EC: 400,

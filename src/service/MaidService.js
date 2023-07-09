@@ -72,10 +72,11 @@ const getMaidList = async () => {
   }
 };
 
-const findMaidByLikeName = async (name) => {
+const findMaidByLikeName = async (name, page, limit) => {
   console.log(name);
+  let offset = (page - 1) * limit;
   try {
-    const maidList = await db.Maid_profile.findAll({
+    const { count, rows } = await db.Maid_profile.findAndCountAll({
       where: {
         last_name: {
           [Op.like]: Sequelize.literal(`\'${name}%\'`), //sea
@@ -87,11 +88,17 @@ const findMaidByLikeName = async (name) => {
           attributes: ["username", "email"],
         },
       ],
+      offset: +offset,
+      limit: +limit,
     });
+    console.log("rows", rows);
     return {
       EC: 200,
       EM: "Get maid list successfully",
-      DT: maidList,
+      DT: {
+        maidList: rows,
+        totalPage: Math.ceil(count / limit),
+      },
     };
   } catch (error) {
     console.log(error);
@@ -184,25 +191,50 @@ const findMaidByLanguage = async (language) => {
   } catch (error) {}
 };
 // fdf
-const filterMaid = async (filterField) => {
-  let maidList = [];
-  let maidList1 = [];
-  let maidList2 = [];
-  let maidList3 = [];
-  let maidList4 = [];
-  //string to json
-  filterField = JSON.parse(filterField);
+const filterMaid = async (filterField, page, limit) => {
+  console.log(filterField, page, limit);
+  let offset = (page - 1) * limit;
+  let totalPage = 0;
+  let maidList;
   try {
-    if (filterField?.experience?.on == true) {
-      maidList1 = await db.Maid_profile.findAll({
-        where: {
-          experience: {
-            [Op.and]: [
-              { [Op.gte]: filterField?.experience.min },
-              { [Op.lte]: filterField?.experience.max },
-            ],
+    console.log();
+    filterField = JSON.parse(filterField);
+    if (filterField.ratingIncrease)
+      maidList = await db.Maid_profile.findAll({
+        include: [
+          {
+            model: db.User,
+            attributes: ["username", "email"],
           },
-        },
+          {
+            model: db.Language,
+            attributes: ["language_name"],
+            through: {
+              attributes: [],
+            },
+          },
+        ],
+        order: [["rating", "ASC"]],
+      });
+    else if (filterField.ratingDecrease)
+      maidList = await db.Maid_profile.findAll({
+        include: [
+          {
+            model: db.User,
+            attributes: ["username", "email"],
+          },
+          {
+            model: db.Language,
+            attributes: ["language_name"],
+            through: {
+              attributes: [],
+            },
+          },
+        ],
+        order: [["rating", "DESC"]],
+      });
+    else {
+      maidList = await db.Maid_profile.findAll({
         include: [
           {
             model: db.User,
@@ -218,95 +250,45 @@ const filterMaid = async (filterField) => {
         ],
       });
     }
-    if (filterField?.price?.on == true) {
-      maidList2 = await db.Maid_profile.findAll({
-        where: {
-          price_per_hour: {
-            [Op.and]: [
-              { [Op.gte]: filterField?.price.min },
-              { [Op.lte]: filterField?.price.max },
-            ],
-          },
-        },
-        include: [
-          {
-            model: db.User,
-            attributes: ["username", "email"],
-          },
-          {
-            model: db.Language,
-            attributes: ["language_name"],
-            through: {
-              attributes: [],
-            },
-          },
-        ],
+    console.log("asd", filterField.language);
+    if (filterField.language?.status) {
+      maidList = maidList.filter((maid) => {
+        maid = maid.toJSON();
+        console.log(maid.Languages);
+        let check = false;
+        for (let i = 0; i < maid.Languages.length; i++) {
+          if (maid.Languages[i].language_name == filterField.language.language_name) {
+            check = true;
+            break;
+          }
+        }
+        return check;
       });
     }
-    if (filterField?.rating?.on == true) {
-      maidList3 = await db.Maid_profile.findAll({
-        where: {
-          rating: {
-            [Op.and]: [
-              { [Op.gte]: filterField?.rating.min },
-              { [Op.lte]: filterField?.rating.max },
-            ],
-          },
-        },
-        include: [
-          {
-            model: db.User,
-            attributes: ["username", "email"],
-          },
-          {
-            model: db.Language,
-            attributes: ["language_name"],
-            through: {
-              attributes: [],
-            },
-          },
-        ],
-      });
-    }
-
-    if (filterField?.language?.on == true)
-      maidList4 = await findMaidByLanguage(filterField?.language.language);
-    console.log(" 0 :", maidList.length);
-    console.log(" 1 :", maidList1.length);
-    console.log(" 2 :", maidList2.length);
-    console.log(" 3 :", maidList3.length);
-    console.log(" 4 :", maidList4.length);
-
-    // find common element of 4 arrays
-    if (maidList1.length > 0) maidList = maidList1;
-    else if (maidList2.length > 0) maidList = maidList2;
-    else if (maidList3.length > 0) maidList = maidList3;
-    else if (maidList4.length > 0) maidList = maidList4;
-
-    if (maidList1.length == 0 && !filterField.experience.on)
-      maidList1 = maidList;
-    if (maidList2.length == 0 && !filterField.price.on) maidList2 = maidList;
-    if (maidList3.length == 0 && !filterField.rating.on) maidList3 = maidList;
-    if (maidList4.length == 0 && !filterField.language.on) maidList4 = maidList;
-
-    console.log(" 0 :", maidList.length);
-    console.log(" 1 :", maidList1.length);
-    console.log(" 2 :", maidList2.length);
-    console.log(" 3 :", maidList3.length);
-    console.log(" 4 :", maidList4.length);
-    maidList = maidList.filter((value) => {
-      return (
-        maidList1.some((item) => item.UserId == value.UserId) &&
-        maidList2.some((item) => item.UserId == value.UserId) &&
-        maidList3.some((item) => item.UserId == value.UserId) &&
-        maidList4.some((item) => item.UserId == value.UserId)
-      );
+    let skills = [];
+    if (filterField.electrical) skills.push("電子修理");
+    if (filterField.food) skills.push("料理");
+    if (filterField.care) skills.push("赤ちゃん世話");
+    maidList = maidList.filter((maid) => {
+      let maidSkill = maid.skills.split(",");
+      let check = true;
+      for (let i = 0; i < skills.length; i++) {
+        if (!maidSkill.includes(skills[i])) {
+          check = false;
+          break;
+        }
+      }
+      return check;
     });
-
+    totalPage = Math.ceil(maidList.length / limit);
+    maidList = maidList.slice(offset, offset + limit);
     return {
       EC: 200,
-      EM: "successful",
-      DT: maidList,
+      EM: "Get maid list successfully",
+      DT: {
+        totalPage: totalPage,
+        maidList: maidList,
+      },
     };
   } catch (error) {
     console.log(error);

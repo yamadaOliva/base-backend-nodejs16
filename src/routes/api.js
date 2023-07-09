@@ -28,6 +28,7 @@ const initAPI = (app) => {
     router.get('/review/check', reviewController.checkIsRequestController)
 
     router.post('/user/profile',userController.updateUserProfileController)
+    router.post('/user/profile/create',userController.createUserProfileController)
     router.get('/user/profile',userController.getUserProfileController)
     router.get('/user/profile/list',userController.getListUserProfilesController)
 

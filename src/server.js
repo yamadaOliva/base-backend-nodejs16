@@ -22,7 +22,7 @@ socketIo.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    console.log("Client disconnected"); // Khi client disconnect thì log ra terminal.
+     // Khi client disconnect thì log ra terminal.
   });
 });
 
