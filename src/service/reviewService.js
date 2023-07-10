@@ -1,5 +1,5 @@
 import db from "../models/index.js";
-
+import { updateRating }  from "./maidService.js";
 const getReviewsByID = async (id) => {
   try {
     const reviews = await db.Review.findAll({
@@ -26,6 +26,9 @@ const createReview = async (review) => {
       rating: review.rating,
       comment: review.comment,
     });
+    const avg = await getRatingAverage(review.maid_id);
+    console.log("avg///////",avg);
+    await updateRating(review.maid_id,avg);
     return newReview;
   } catch (error) {
     console.log(error);
@@ -53,6 +56,24 @@ const checkIsRequest = async (maid_id, user_id) => {
     DT: request,
   };
 };
+
+const getRatingAverage = async (id) => {
+  try {
+    const reviews = await db.Review.findAll({
+      where: {
+        maid_id: id,
+      },
+    });
+    let total = 0;
+    reviews.forEach((review) => {
+      total += review.rating;
+    });
+    return total / reviews.length;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 
 module.exports = {
   getReviewsByID,

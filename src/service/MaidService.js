@@ -41,7 +41,19 @@ const getMaidbyId = async (maidId) => {
         },
       ],
     });
-    return maid;
+    console.log("maid", maid.get({ plain: true }));
+    if (!maid)
+      return {
+        EC: 400,
+        EM: "Maid not found",
+        DT: null,
+      };
+
+    return {
+      EC: 200,
+      EM: "Get maid successfully",
+      DT: maid,
+    };
   } catch (error) {}
 };
 
@@ -197,7 +209,6 @@ const filterMaid = async (filterField, page, limit) => {
   let totalPage = 0;
   let maidList;
   try {
-    console.log();
     filterField = JSON.parse(filterField);
     if (filterField.ratingIncrease)
       maidList = await db.Maid_profile.findAll({
@@ -250,14 +261,17 @@ const filterMaid = async (filterField, page, limit) => {
         ],
       });
     }
-    console.log("asd", filterField.language);
+
     if (filterField.language?.status) {
       maidList = maidList.filter((maid) => {
         maid = maid.toJSON();
-        console.log(maid.Languages);
+
         let check = false;
         for (let i = 0; i < maid.Languages.length; i++) {
-          if (maid.Languages[i].language_name == filterField.language.language_name) {
+          if (
+            maid.Languages[i].language_name ==
+            filterField.language.language_name
+          ) {
             check = true;
             break;
           }
@@ -294,6 +308,191 @@ const filterMaid = async (filterField, page, limit) => {
     console.log(error);
   }
 };
+const checkProFileMaidService = async (id) => {
+  try {
+    const maid = await db.Maid_profile.findOne({
+      where: {
+        UserID: id,
+      },
+    });
+    if (maid) return true;
+    return false;
+  } catch (error) {
+    console.log(error);
+  }
+};
+const createProfileMaidService = async (data) => {
+  try {
+    if (await checkProFileMaidService(data.id))
+      return {
+        EC: 400,
+        EM: "Maid profile already exists",
+        DT: null,
+      };
+    const maid = await db.Maid_profile.create({
+      UserId: data.id,
+      first_name: data.first_name,
+      last_name: data.last_name,
+      phone_number: data.phone_number,
+      address: data.address,
+      city: data.city,
+      country: data.country,
+      description: data.description,
+      experience: data.experience,
+      skills: data.skills,
+      ceftification: data.certification,
+      skills: data.skills,
+      rating: 5,
+      price_per_hour: data.price_per_hour,
+      avatar_url: data.avatar_url,
+    });
+    //save language
+    data.language_name.forEach(async (language) => {
+      language = language.trim();
+      const ptr_language = await db.Language.findOne({
+        where: {
+          language_name: language,
+        },
+        raw: true,
+      });
+
+      await db.Maid_language.create({
+        MaidProfileId: data.profile_id,
+        LanguageId: ptr_language.id,
+      });
+    });
+
+    return {
+      EC: 200,
+      EM: "Create maid profile successfully",
+      DT: null,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+const updateProfileMaidService = async (data) => {
+  console.log(data);
+  try {
+    await db.Maid_profile.update(
+      {
+        first_name: data.first_name,
+        last_name: data.last_name,
+        phone_number: data.phone_number,
+        address: data.address,
+        city: data.city,
+        country: data.country,
+        description: data.description,
+        experience: data.experience,
+        skills: data.skills,
+        ceftification: data.certification,
+        skills: data.skills,
+        price_per_hour: data.price_per_hour,
+        avatar_url: data.avatar_url,
+      },
+      {
+        where: {
+          UserId: data.id,
+        },
+      }
+    );
+    //save language
+
+    data.language_name.forEach(async (language) => {
+      language = language.trim();
+      const ptr_language = await db.Language.findOne({
+        where: {
+          language_name: language,
+        },
+        raw: true,
+      });
+      console.log("ptr", ptr_language);
+      const check = await db.Maid_language.findOne({
+        where: {
+          MaidProfileId: data.profile_id,
+          LanguageId: ptr_language.id,
+        },
+      });
+      if (!check) {
+        await db.Maid_language.create({
+          MaidProfileId: data.profile_id,
+          LanguageId: ptr_language.id,
+        });
+      }
+    });
+
+    return {
+      EC: 200,
+      EM: "Update maid profile successfully",
+      DT: null,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const updateRating = async (maidId, rating) => {
+  console.log(maidId, rating);
+  try {
+    await db.Maid_profile.update(
+      {
+        rating: rating,
+      },
+      {
+        where: {
+          id: maidId,
+        },
+      }
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const priceFilter = async (page, limit) => {
+  let offset = (page - 1) * limit;
+  try {
+    const { count, rows } = await db.Maid_profile.findAndCountAll({
+      order: [["price_per_hour", "DESC"]],
+      offset: +offset,
+      limit: +limit,
+    });
+    return {
+      EC: 200,
+      EM: "Get maid list successfully",
+      DT: {
+        maidList: rows,
+        totalPage: Math.ceil(count / limit),
+        blocked: await a2(),
+        totalRows: count,
+      },
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+const ratingFilter = async (page, limit) => {
+  let offset = (page - 1) * limit;
+  try {
+    const { count, rows } = await db.Maid_profile.findAndCountAll({
+      order: [["rating", "DESC"]],
+      offset: +offset,
+      limit: +limit,
+    });
+    return {
+      EC: 200,
+      EM: "Get maid list successfully",
+      DT: {
+        maidList: rows,
+        totalPage: Math.ceil(count / limit),
+        blocked: await a2(),
+        totalRows: count,
+      },
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 module.exports = {
   getMaidList,
@@ -302,4 +501,9 @@ module.exports = {
   findMaidByLanguage,
   getMaidbyId,
   filterMaid,
+  createProfileMaidService,
+  updateProfileMaidService,
+  updateRating,
+  priceFilter,
+  ratingFilter,
 };

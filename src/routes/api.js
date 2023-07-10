@@ -22,6 +22,10 @@ const initAPI = (app) => {
     router.get('/maid/findbyLanguage', maidController.findMaidByLanguageController)
     router.get('/maid/findbyid', maidController.findMaidByIdController)
     router.get('/maid/filter',maidController.filterMaidController)
+    router.post('/maid/create', maidController.createProfileMaidController)
+    router.post('/maid/update', maidController.updateProfileMaidController)
+    router.get('/maid/price', maidController.priceFilterController)
+    router.get('/maid/rating', maidController.ratingFilterController)
 
     router.get('/review/show',reviewController.getReviewController)
     router.post('/review/create', reviewController.createReviewController)
