@@ -9,7 +9,7 @@ import {
   updateProfileMaidService,
   priceFilter,
   ratingFilter,
-} from "../service/MaidService.js";
+} from "../service/maidService.js";
 
 const getMaidListController = async (req, res) => {
   try {
