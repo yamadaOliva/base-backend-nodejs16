@@ -280,9 +280,8 @@ const filterMaid = async (filterField, page, limit) => {
       });
     }
     let skills = [];
-    if (filterField.electrical) skills.push("電子修理");
-    if (filterField.food) skills.push("料理");
-    if (filterField.care) skills.push("赤ちゃん世話");
+    if (filterField.food) skills.push("food");
+    if (filterField.care) skills.push("care");
     maidList = maidList.filter((maid) => {
       let maidSkill = maid.skills.split(",");
       let check = true;
