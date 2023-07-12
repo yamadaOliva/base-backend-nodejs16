@@ -7,6 +7,7 @@ import {
   doneRequest,
   deleteRequest,
   getAverageRating,
+  getRequestByUserId,
 } from "../service/requestService";
 const createRequestController = async (req, res) => {
   const request = req.body;
@@ -71,9 +72,22 @@ const getAverageRatingController = async (req, res) => {
     console.log(error);
   }
 };
+
+const getRequestByUser = async (req, res) => {
+  const user_id = req.query.id;
+  console.log("user_id =>", user_id);
+  try {
+    const result = await getRequestByUserId(user_id);
+    return res.status(200).json(result);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   createRequestController,
   updateRequestController,
   getListRequestController,
   getAverageRatingController,
+  getRequestByUser,
 };

@@ -81,7 +81,6 @@ const getRatingAverage = async (id) => {
 };
 
 const likeAndDislike = async (data) => {
-  console.log("data", data);
   try {
     const check = await db.Review_agreement.findOne({
       where: {
