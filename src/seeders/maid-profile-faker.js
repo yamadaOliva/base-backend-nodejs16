@@ -14,14 +14,10 @@ module.exports = {
     const money = [5,10,15,20];
     const { faker } = require('@faker-js/faker');
     const getRand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-    const arraySkill = ['電子修理','料理','赤ちゃん世話']
-    const getRandom2Skills = () => {
-      let skill1 = arraySkill[getRand(0, 2)];
-      let skill2 = arraySkill[getRand(0, 2)];
-      while (skill1 === skill2) {
-        skill2 = arraySkill[getRand(0, 2)];
-      }
-      return [skill1, skill2];
+    const arraySkill = ['care','food']
+    const getRandom1Skills = () => {
+      let skill = arraySkill[getRand(0, 1)];
+      return [skill];
     }
     const arrayCefitication = ['IELTS 8.0','TOEIC','TOEFL','JLPT N2']
     const getRandom2Cefitication = () => {
@@ -45,7 +41,7 @@ module.exports = {
         description: faker.lorem.paragraph(),
         skills: faker.lorem.paragraph(),
         experience: getRand(1, 10),
-        skills: getRandom2Skills().join(','),
+        skills: getRandom1Skills().join(','),
         birth_date: faker.date.past(),
         ceftification: getRandom2Cefitication().join(','),
         price_per_hour: money[getRand(0, 3)],

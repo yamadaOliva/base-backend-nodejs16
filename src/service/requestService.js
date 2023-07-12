@@ -97,7 +97,7 @@ const updateRequest = async (id) => {
   try {
     await db.Booking.update(
       {
-        status: "accepted",
+        status: "Accepted",
       },
       {
         where: {
@@ -235,6 +235,25 @@ const getAverageRating = async (maid_id) => {
   }
 };
 
+const getRequestByUserId = async (user_id) => {
+  try {
+    const listRequest = await db.Booking.findAll({
+      where: {
+        user_id: user_id,
+      },
+      include: {
+        model: db.Maid_profile,
+      },
+    });
+    return {
+      EC: 200,
+      EM: "Get list request successfully",
+      DT: listRequest,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
 module.exports = {
   createRequest,
   getListRequest2,
@@ -244,4 +263,5 @@ module.exports = {
   doneRequest,
   deleteRequest,
   getAverageRating,
+  getRequestByUserId,
 };
