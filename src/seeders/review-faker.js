@@ -28,7 +28,18 @@ module.exports = {
         })
     }
     await queryInterface.bulkInsert('Review', reviewArray, {});
-  
+  const reviewArray2 =[];
+  const trueFlase = [true,false];
+  for(let i = 1; i<=10; i++){
+    reviewArray2.push({
+      review_id: 1,
+      user_id: i,
+      agreement :  trueFlase[Math.floor(Math.random() * trueFlase.length)],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    })
+  }
+  await queryInterface.bulkInsert('Review_agreement', reviewArray2, {});
     
   },
 

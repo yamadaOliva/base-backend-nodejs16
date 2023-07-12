@@ -97,7 +97,7 @@ const updateRequest = async (id) => {
   try {
     await db.Booking.update(
       {
-        status: "accepted",
+        status: "Accepted",
       },
       {
         where: {

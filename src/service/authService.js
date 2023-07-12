@@ -34,6 +34,7 @@ const registerService = async (user) => {
         username: user.username,
         role: user.role,
         name: user.name,
+        active: true,
       });
       return {
         EC: 200,

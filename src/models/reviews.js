@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Review.belongsTo(models.User);
+      Review.hasMany(models.Review_agreement, {foreignKey: 'review_id'});
     }
   }
   Review.init({
