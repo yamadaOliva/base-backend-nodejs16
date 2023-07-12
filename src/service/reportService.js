@@ -18,9 +18,50 @@ const checkIsExist = async (user_id, report_id) => {
   }
 };
 
+const checkRequested = async (user_id, report_id) => {
+  try {
+    const request = await db.Booking.findOne({
+      where: {
+        user_id: +user_id,
+        booking_id: +report_id,
+        status: "Accepted"
+      },
+    });
+    const request2 = await db.Booking.findOne({
+      where: {
+        user_id: +user_id,
+        booking_id: +report_id,
+        status: "Done"
+      },
+    });
+    const request3 = await db.Booking.findOne({
+      where: {
+        user_id: +user_id,
+        booking_id: +report_id,
+        status: "Canceled"
+      },
+    });
+    console.log(request, request2, request3);
+    if (request||request2||request3) {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.log(error);
+  }
+};
+        
 const createReport = async (data) => {
+
   console.log(data);
   try {
+    if(!await checkRequested(data.user_id, data.reported_id)){
+      return {
+        EC: 400,
+        EM: "注文しなければなりません",
+        DT: "",
+      };
+    }
     if(await checkIsExist(data.user_id, data.reported_id)){
       return {
         EC: 400,
