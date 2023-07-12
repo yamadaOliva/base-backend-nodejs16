@@ -4,6 +4,7 @@ import maidController from '../controller/maidController.js';
 import reviewController from '../controller/reviewController.js';
 import userController from '../controller/userController.js';
 import requestController from '../controller/requestController.js';
+import reportController from '../controller/reportController.js';
 const router = express.Router();
 
 const initAPI = (app) => {
@@ -40,6 +41,10 @@ const initAPI = (app) => {
     router.get('/maid/request/list',requestController.getListRequestController)
     router.post('/maid/request/update',requestController.updateRequestController)
     router.get('/maid/request/average',requestController.getAverageRatingController)
+
+    router.post('/report/create',reportController.createReportController)
+    router.get('/report/list',reportController.getReportController)
+    router.post('/report/handle',reportController.handleReportController)
 
     router.get('/refesh-token',authController.reLoginController)
     return app.use("/api/v1", router);
