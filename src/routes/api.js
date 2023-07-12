@@ -37,6 +37,7 @@ const initAPI = (app) => {
     router.post('/user/profile/create',userController.createUserProfileController)
     router.get('/user/profile',userController.getUserProfileController)
     router.get('/user/profile/list',userController.getListUserProfilesController)
+    router.get('/user/request/list',requestController.getRequestByUser)
 
     router.post('/maid/request/create',requestController.createRequestController)
     router.get('/maid/request/list',requestController.getListRequestController)
