@@ -1,10 +1,36 @@
 const { Op } = require("sequelize");
+import db from "../models/index.js";
+
+const checkIsExist = async (user_id, report_id) => {
+  try {
+    const report = await db.Report.findOne({
+      where: {
+        user_id: user_id,
+        report_id: report_id,
+      },
+    });
+    if (report) {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 const createReport = async (data) => {
+  console.log(data);
   try {
+    if(await checkIsExist(data.user_id, data.reported_id)){
+      return {
+        EC: 400,
+        EM: "レポートは存在します",
+        DT: "",
+      };
+    }
     const newReport = await db.Report.create({
       user_id: data.user_id,
-      reported_id: data.report_id,
+      report_id: data.reported_id,
       reason: data.reason,
       is_handled: false,
     });
