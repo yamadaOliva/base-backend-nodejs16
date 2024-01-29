@@ -1,17 +1,17 @@
-import Sequelize from 'sequelize';
+import Sequelize from "sequelize";
 
-const sequelize = new  Sequelize('backendtest','root','123456',{
-    host: 'localhost',
-    dialect: 'mysql',
-})
+const sequelize = new Sequelize("backendtest", "root", null, {
+  host: "localhost",
+  dialect: "mysql",
+});
 
 const connection = async () => {
-    try{
-        await sequelize.authenticate();
-        console.log('Connection has been established successfully.');
-    }catch(err){
-        console.log('Unable to connect to the database:', err);
-    }
-}
+  try {
+    await sequelize.authenticate();
+    console.log("Connection has been established successfully.");
+  } catch (err) {
+    console.log("Unable to connect to the database:", err);
+  }
+};
 
 export default connection;

@@ -80,6 +80,7 @@ const loginService = async (user) => {
           username: userTemp.username,
           role: userTemp.role,
           id: userTemp.id,
+          active: userTemp.active,
         },
       };
     }
@@ -134,7 +135,7 @@ const blockedService = async (id) => {
 };
 
 const unblockedService = async (id) => {
-    console.log("id==>",id);
+  console.log("id==>", id);
   try {
     const user = await db.User.update(
       {
